@@ -1,0 +1,144 @@
+murad@meet:~/Downloads/SparseRank_Final (1)/SparseRank_Final$  source "/home/murad/Downloads/SparseRank_Final (1)/SparseRank_Final/venv/bin/activate"
+(venv) murad@meet:~/Downloads/SparseRank_Final (1)/SparseRank_Final$ "/home/murad/Downloads/SparseRank_Final (1)/SparseRank_Final/venv/bin/python" "/home/murad/Downloads/SparseRank_Final (1)/SparseRank_Final/run_pipeline.py"
+============================================================
+  SparseRank — Full Pipeline
+============================================================
+
+[STEP 1] Load / generate dataset
+[data_loader] Loaded from cache: data/processed/rs_anomic_complete.parquet
+  Dataset: 5061 windows × 404 features
+
+[STEP 2] L1-regularized feature selection
+[feature_select] Loading dataset...
+[data_loader] Loaded from cache: data/processed/rs_anomic_complete.parquet
+  Train: (4048, 402), Test: (1013, 402)
+  p=402 total features
+
+[feature_select] L1 sweep (C ∈ {0.001, 0.01, 0.1, 1.0}):
+  C=0.01   k= 24  F1=0.6621  Prec=0.6690  Rec=0.6554  cost_red=94.0%
+  C=0.1    k=102  F1=0.6781  Prec=0.6875  Rec=0.6689  cost_red=74.6%
+  C=1.0    k=220  F1=0.6667  Prec=0.6759  Rec=0.6577  cost_red=45.3%
+  C=FULL   k=402  F1=0.6537  Prec=0.6636  Rec=0.6441  cost_red=0.0%
+
+[feature_select] Results saved to data/processed/feature_select_results.csv
+
+[feature_select] ✓ Best C=0.01: k=24 features, F1=0.6621 vs full=0.6537 (101.3%)
+  → Cost reduction: 94.0%
+
+[feature_select] Saved 24 selected indices → data/processed/selected_idx.npy
+
+[feature_select] Stability sweep over 3 anomaly ratios...
+  C=0.01  anomaly_ratio=5%  k=12
+  C=0.01  anomaly_ratio=10%  k=19
+  C=0.01  anomaly_ratio=40%  k=24
+
+── Feature Selection Summary ──
+     C   k     F1  Precision  Recall  cost_reduction_pct
+ 0.001   0 0.0000     0.0000  0.0000               100.0
+  0.01  24 0.6621     0.6690  0.6554                94.0
+   0.1 102 0.6781     0.6875  0.6689                74.6
+   1.0 220 0.6667     0.6759  0.6577                45.3
+  FULL 402 0.6537     0.6636  0.6441                 0.0
+
+[STEP 3] Isolation Forest on sparse features
+[anomaly_detector] Loading dataset and artifacts...
+[data_loader] Loaded from cache: data/processed/rs_anomic_complete.parquet
+  Using k=24 / p=402 features (6.0% of full set)
+
+[anomaly_detector] Test-set results (k=24 sparse features):
+  F1        = 0.6469
+  Precision = 0.6566
+  Recall    = 0.6374
+  ROC-AUC   = 0.7628
+  AP        = 0.7311
+
+[anomaly_detector] KPI validation (anomaly windows only, n=431):
+  Spearman ρ(IF_score, KPI) = 0.2292  p=1.5183e-06
+  Interpretation: lower score = more anomalous = lower KPI
+  All windows: ρ(IF_score, KPI) = 0.3947
+  ✓ Meaningful KPI correlation detected (ρ=0.3947)
+
+[anomaly_detector] Saved artifacts to data/processed/
+
+[STEP 4] SHAP explainability
+[shap_explainer] Loading dataset and artifacts...
+[data_loader] Loaded from cache: data/processed/rs_anomic_complete.parquet
+  Sparse feature set: k=24
+  Test windows: 1013 (anomaly: 444)
+
+[shap_explainer] Computing SHAP on L1-selected (sparse) features...
+[shap_explainer] Top-5 features (sparse):
+  user__cpu_user_mean                                 0.158430
+  user__network_transmit_bytes_mean                   0.078117
+  web__network_transmit_packets_mean                  0.077181
+  user__network_receive_packets_mean                  0.055236
+  user__network_receive_bytes_std                     0.034531
+
+[shap_explainer] Computing SHAP on full feature set for comparison...
+[shap_explainer] Top-5 features (full):
+  mongodb__network_transmit_packets_mean              0.169339
+  user__network_transmit_bytes_mean                   0.066682
+  ratings__rt_web_get_ratings_mean                    0.062590
+  user__fs_usage_bytes_mean                           0.045428
+  rabbitmq__network_transmit_packets_mean             0.042933
+
+[shap_explainer] Computing Spearman ρ on shared feature rankings...
+  Shared features: 24
+  Spearman ρ(sparse_rank, full_rank) = -0.1330  p=5.3542e-01
+  ⚠ rho=-0.1330 < 0.75 — rankings diverge
+
+[shap_explainer] Attribution coverage:
+  L1-selected features (24/402) account for 12.5% of total SHAP attribution
+
+[shap_explainer] Top feature: user__cpu_user_mean
+[shap_explainer] Saved SHAP results to data/processed/
+
+[STEP 5] Evaluation + figures
+[evaluate] Loading all artifacts...
+[data_loader] Loaded from cache: data/processed/rs_anomic_complete.parquet
+
+[evaluate] Building baseline comparison table...
+  Full-feature IF            k=402  F1=0.6537  AUC=0.7780
+  SparseRank (L1)            k= 24  F1=0.6621  AUC=0.7655
+  Random-k IF                k= 24  F1=0.6464  AUC=0.7490
+  Top-k ANOVA IF             k= 24  F1=0.5201  AUC=0.5219
+  Top-20 freq IF             k= 20  F1=0.6286  AUC=0.7354
+
+── Baseline Comparison ──
+         Method  k_features  Cost_Reduction_%     F1  Precision  Recall  ROC_AUC
+Full-feature IF         402               0.0 0.6537     0.6636  0.6441   0.7780
+SparseRank (L1)          24              94.0 0.6621     0.6690  0.6554   0.7655
+    Random-k IF          24              94.0 0.6464     0.6707  0.6239   0.7490
+ Top-k ANOVA IF          24              94.0 0.5201     0.5318  0.5090   0.5219
+ Top-20 freq IF          20              95.0 0.6286     0.6244  0.6329   0.7354
+
+[evaluate] Generating figures...
+  Saved: experiments/figures/sparserank_all_figures.{pdf,png}
+[evaluate] ✓ All figures saved.
+
+[evaluate] Inference time on 1013 windows: 15.5 ms
+
+──────── FINAL RESULTS SUMMARY ────────
+k_features           24.0000
+p_total             402.0000
+F1                    0.6469
+Precision             0.6566
+Recall                0.6374
+ROC_AUC               0.7628
+AveragePrecision      0.7311
+kpi_spearman_rho      0.3947
+cost_reduction_pct   94.0000
+
+SHAP attribution coverage: 12.5%
+SHAP rank Spearman ρ:       -0.1330
+
+============================================================
+  Pipeline complete in 149.9s
+============================================================
+
+Outputs:
+  data/processed/feature_select_results.csv
+  data/processed/eval_metrics.csv
+  data/processed/shap_feature_importance.csv
+  data/processed/baseline_comparison.csv
+  experiments/figures/sparserank_all_figures.png
