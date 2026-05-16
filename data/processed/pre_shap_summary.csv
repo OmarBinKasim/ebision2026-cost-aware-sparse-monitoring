@@ -1,0 +1,2 @@
+k_sparse,p_full,spearman_rho_rank,attribution_coverage_pct,top1_feature,top5_features
+24,402,-0.133,12.5,user__cpu_user_mean,"['user__cpu_user_mean', 'user__network_transmit_bytes_mean', 'web__network_transmit_packets_mean', 'user__network_receive_packets_mean', 'user__network_receive_bytes_std']"

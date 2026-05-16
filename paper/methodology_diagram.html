@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+body { margin: 0; background: white; font-family: Arial, sans-serif; }
+</style>
+</head>
+<body>
+<svg width="1360" viewBox="0 0 680 540" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <style>
+    text { font-family: Arial, sans-serif; }
+    .th { font-weight: 600; fill: #1e293b; }
+    .ts { font-weight: 400; fill: #475569; }
+  </style>
+</defs>
+<!-- Same SVG content as widget but with explicit colors for PNG export -->
+<rect width="680" height="540" fill="white"/>
+
+<!-- TITLE -->
+<text x="340" y="22" text-anchor="middle" style="font-size:13px;font-weight:700;fill:#185FA5">SparseRank — Explainable Cost-Aware Feature Selection Framework</text>
+<text x="340" y="37" text-anchor="middle" style="font-size:10px;fill:#6B7280">E-commerce microservice anomaly detection · EBISION 2026</text>
+
+<!-- P1 container -->
+<rect x="14" y="50" width="152" height="295" rx="10" fill="none" stroke="#185FA5" stroke-width="1.2" stroke-dasharray="5 3"/>
+<text x="90" y="65" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#185FA5">P1: Data Ingestion</text>
+<rect x="24" y="73" width="132" height="40" rx="7" fill="#DBEAFE" stroke="#185FA5" stroke-width="0.8"/>
+<text x="90" y="89" text-anchor="middle" style="font-size:11px;font-weight:600;fill:#1E3A5F">cAdvisor metrics</text>
+<text x="90" y="103" text-anchor="middle" style="font-size:9.5px;fill:#185FA5">12 services × 19 metrics</text>
+<line x1="90" y1="113" x2="90" y2="127" stroke="#185FA5" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="24" y="128" width="132" height="40" rx="7" fill="#DBEAFE" stroke="#185FA5" stroke-width="0.8"/>
+<text x="90" y="144" text-anchor="middle" style="font-size:11px;font-weight:600;fill:#1E3A5F">Response times</text>
+<text x="90" y="158" text-anchor="middle" style="font-size:9.5px;fill:#185FA5">p99 latency per window</text>
+<line x1="90" y1="168" x2="90" y2="182" stroke="#185FA5" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="24" y="183" width="132" height="34" rx="7" fill="#F1F5F9" stroke="#64748B" stroke-width="0.8"/>
+<text x="90" y="196" text-anchor="middle" style="font-size:11px;font-weight:600;fill:#334155">StandardScaler</text>
+<text x="90" y="209" text-anchor="middle" style="font-size:9.5px;fill:#64748B">zero-mean, unit-var</text>
+<line x1="90" y1="217" x2="90" y2="231" stroke="#185FA5" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="24" y="232" width="132" height="48" rx="7" fill="#F1F5F9" stroke="#64748B" stroke-width="0.8"/>
+<text x="90" y="247" text-anchor="middle" style="font-size:11px;font-weight:600;fill:#334155">Feature matrix X</text>
+<text x="90" y="261" text-anchor="middle" style="font-size:9.5px;fill:#64748B">1580 windows × p=228</text>
+<text x="90" y="273" text-anchor="middle" style="font-size:9.5px;fill:#64748B">80/20 stratified split</text>
+<rect x="26" y="293" width="128" height="34" rx="6" fill="none" stroke="#EA580C" stroke-width="1" stroke-dasharray="3 2"/>
+<text x="90" y="306" text-anchor="middle" style="font-size:10px;font-weight:700;fill:#EA580C">KPI oracle</text>
+<text x="90" y="319" text-anchor="middle" style="font-size:9px;fill:#EA580C">order_http_2xx_rate</text>
+<line x1="166" y1="245" x2="178" y2="245" stroke="#185FA5" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+<!-- P2 container -->
+<rect x="178" y="50" width="190" height="295" rx="10" fill="none" stroke="#7C3AED" stroke-width="1.2" stroke-dasharray="5 3"/>
+<text x="273" y="65" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#7C3AED">P2: L1 Feature Selection</text>
+<rect x="188" y="73" width="78" height="27" rx="6" fill="#EDE9FE" stroke="#7C3AED" stroke-width="0.6"/>
+<text x="227" y="89" text-anchor="middle" style="font-size:9.5px;fill:#5B21B6">C = 0.001</text>
+<rect x="188" y="107" width="78" height="27" rx="6" fill="#EDE9FE" stroke="#7C3AED" stroke-width="0.6"/>
+<text x="227" y="123" text-anchor="middle" style="font-size:9.5px;fill:#5B21B6">C = 0.005</text>
+<rect x="188" y="141" width="78" height="29" rx="6" fill="#7C3AED" stroke="none"/>
+<text x="227" y="158" text-anchor="middle" style="font-size:10px;font-weight:700;fill:#fff">C = 0.01 ★</text>
+<rect x="188" y="177" width="78" height="27" rx="6" fill="#EDE9FE" stroke="#7C3AED" stroke-width="0.6"/>
+<text x="227" y="193" text-anchor="middle" style="font-size:9.5px;fill:#5B21B6">C = 0.1</text>
+<rect x="188" y="211" width="78" height="27" rx="6" fill="#EDE9FE" stroke="#7C3AED" stroke-width="0.6"/>
+<text x="227" y="227" text-anchor="middle" style="font-size:9.5px;fill:#5B21B6">C = 1.0</text>
+<!-- LogReg block -->
+<rect x="280" y="77" width="78" height="179" rx="8" fill="none" stroke="#7C3AED" stroke-width="0.8"/>
+<text x="319" y="92" text-anchor="middle" style="font-size:9.5px;font-weight:700;fill:#7C3AED">LogReg (L1)</text>
+<rect x="288" y="98" width="62" height="16" rx="4" fill="#EDE9FE" stroke="#7C3AED" stroke-width="0.5"/>
+<text x="319" y="108" text-anchor="middle" style="font-size:9px;fill:#5B21B6">penalty=l1</text>
+<rect x="288" y="118" width="62" height="16" rx="4" fill="#EDE9FE" stroke="#7C3AED" stroke-width="0.5"/>
+<text x="319" y="128" text-anchor="middle" style="font-size:9px;fill:#5B21B6">solver=saga</text>
+<rect x="288" y="138" width="62" height="16" rx="4" fill="#EDE9FE" stroke="#7C3AED" stroke-width="0.5"/>
+<text x="319" y="148" text-anchor="middle" style="font-size:9px;fill:#5B21B6">non-zero coefs</text>
+<rect x="288" y="158" width="62" height="16" rx="4" fill="#EDE9FE" stroke="#7C3AED" stroke-width="0.5"/>
+<text x="319" y="168" text-anchor="middle" style="font-size:9px;fill:#5B21B6">F1 validation</text>
+<rect x="288" y="178" width="62" height="16" rx="4" fill="#EDE9FE" stroke="#7C3AED" stroke-width="0.5"/>
+<text x="319" y="188" text-anchor="middle" style="font-size:9px;fill:#5B21B6">cost reduction</text>
+<rect x="288" y="198" width="62" height="26" rx="4" fill="#7C3AED" fill-opacity="0.2" stroke="#7C3AED" stroke-width="0.8"/>
+<text x="319" y="209" text-anchor="middle" style="font-size:9px;font-weight:700;fill:#4C1D95">selected_idx</text>
+<text x="319" y="219" text-anchor="middle" style="font-size:9px;fill:#4C1D95">k=16 features</text>
+<line x1="266" y1="86" x2="280" y2="110" stroke="#7C3AED" stroke-width="0.7" marker-end="url(#arrow)" opacity="0.5"/>
+<line x1="266" y1="121" x2="280" y2="135" stroke="#7C3AED" stroke-width="0.7" marker-end="url(#arrow)" opacity="0.5"/>
+<line x1="266" y1="156" x2="280" y2="156" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#arrow)"/>
+<line x1="266" y1="191" x2="280" y2="183" stroke="#7C3AED" stroke-width="0.7" marker-end="url(#arrow)" opacity="0.5"/>
+<line x1="266" y1="225" x2="280" y2="210" stroke="#7C3AED" stroke-width="0.7" marker-end="url(#arrow)" opacity="0.5"/>
+<rect x="188" y="271" width="172" height="38" rx="7" fill="#EDE9FE" stroke="#7C3AED" stroke-width="0.7"/>
+<text x="274" y="286" text-anchor="middle" style="font-size:10.5px;font-weight:700;fill:#4C1D95">Optimal: C=0.01, k=16</text>
+<text x="274" y="300" text-anchor="middle" style="font-size:9.5px;fill:#6D28D9">93% cost reduction · 7% of feature space</text>
+<text x="350" y="130" text-anchor="middle" style="font-size:12px;fill:#EA580C;font-style:italic">ℒ₁</text>
+<text x="350" y="190" text-anchor="middle" style="font-size:12px;fill:#EA580C;font-style:italic">ℒ₂</text>
+<line x1="368" y1="245" x2="382" y2="245" stroke="#7C3AED" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+<!-- P3 container -->
+<rect x="382" y="50" width="202" height="295" rx="10" fill="none" stroke="#0891B2" stroke-width="1.2" stroke-dasharray="5 3"/>
+<text x="483" y="65" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#0891B2">P3: Detection + Explanation</text>
+<rect x="392" y="73" width="87" height="92" rx="8" fill="none" stroke="#0891B2" stroke-width="0.9"/>
+<text x="435" y="89" text-anchor="middle" style="font-size:9.5px;font-weight:700;fill:#0891B2">IsolationForest</text>
+<rect x="400" y="95" width="71" height="15" rx="4" fill="#CFFAFE" stroke="#0891B2" stroke-width="0.5"/>
+<text x="435" y="105" text-anchor="middle" style="font-size:9px;fill:#0E7490">n_estimators=200</text>
+<rect x="400" y="114" width="71" height="15" rx="4" fill="#CFFAFE" stroke="#0891B2" stroke-width="0.5"/>
+<text x="400" y="124" x="435" text-anchor="middle" style="font-size:9px;fill:#0E7490"><tspan x="435">k=16 features</tspan></text>
+<rect x="400" y="133" width="71" height="24" rx="4" fill="#0891B2" fill-opacity="0.2" stroke="#0891B2" stroke-width="0.7"/>
+<text x="435" y="143" text-anchor="middle" style="font-size:9px;font-weight:700;fill:#164E63">score A(t)</text>
+<text x="435" y="153" text-anchor="middle" style="font-size:9px;fill:#164E63">per window</text>
+<line x1="435" y1="165" x2="435" y2="177" stroke="#0891B2" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="392" y="178" width="87" height="100" rx="8" fill="none" stroke="#0891B2" stroke-width="0.9"/>
+<text x="435" y="194" text-anchor="middle" style="font-size:9.5px;font-weight:700;fill:#0891B2">TreeSHAP</text>
+<rect x="400" y="199" width="71" height="15" rx="4" fill="#CFFAFE" stroke="#0891B2" stroke-width="0.5"/>
+<text x="435" y="209" text-anchor="middle" style="font-size:9px;fill:#0E7490">DecisionTree surr.</text>
+<rect x="400" y="218" width="71" height="15" rx="4" fill="#CFFAFE" stroke="#0891B2" stroke-width="0.5"/>
+<text x="435" y="228" text-anchor="middle" style="font-size:9px;fill:#0E7490">|SHAP| per feature</text>
+<rect x="400" y="237" width="71" height="15" rx="4" fill="#CFFAFE" stroke="#0891B2" stroke-width="0.5"/>
+<text x="435" y="247" text-anchor="middle" style="font-size:9px;fill:#0E7490">Spearman rank</text>
+<rect x="400" y="256" width="71" height="16" rx="4" fill="#0891B2" fill-opacity="0.2" stroke="#0891B2" stroke-width="0.7"/>
+<text x="435" y="266" text-anchor="middle" style="font-size:9px;font-weight:700;fill:#164E63">S(fᵢ) ranking</text>
+<rect x="392" y="291" width="87" height="28" rx="6" fill="none" stroke="#EA580C" stroke-width="0.9" stroke-dasharray="3 2"/>
+<text x="435" y="303" text-anchor="middle" style="font-size:9px;font-weight:700;fill:#EA580C">KPI validate</text>
+<text x="435" y="314" text-anchor="middle" style="font-size:9px;fill:#EA580C">Spearman ρ(A,Δkpi)</text>
+<!-- right column -->
+<rect x="492" y="73" width="84" height="52" rx="7" fill="#CCFBF1" stroke="#0891B2" stroke-width="0.7"/>
+<text x="534" y="89" text-anchor="middle" style="font-size:10.5px;font-weight:700;fill:#0E4F44">Detection</text>
+<text x="534" y="102" text-anchor="middle" style="font-size:9px;fill:#0E7490">F1=0.581  AUC=0.823</text>
+<text x="534" y="115" text-anchor="middle" style="font-size:9px;fill:#0E7490">MCC=0.559</text>
+<rect x="492" y="137" width="84" height="52" rx="7" fill="#CCFBF1" stroke="#0891B2" stroke-width="0.7"/>
+<text x="534" y="153" text-anchor="middle" style="font-size:10.5px;font-weight:700;fill:#0E4F44">Confusion</text>
+<text x="534" y="166" text-anchor="middle" style="font-size:9px;fill:#0E7490">TP=9  FP=6</text>
+<text x="534" y="179" text-anchor="middle" style="font-size:9px;fill:#0E7490">TN=294  FN=7</text>
+<rect x="492" y="203" width="84" height="52" rx="7" fill="#CCFBF1" stroke="#0891B2" stroke-width="0.7"/>
+<text x="534" y="219" text-anchor="middle" style="font-size:10.5px;font-weight:700;fill:#0E4F44">Top SHAP feat.</text>
+<text x="534" y="232" text-anchor="middle" style="font-size:8.5px;fill:#0E7490">fe·db_conn 0.159</text>
+<text x="534" y="244" text-anchor="middle" style="font-size:8.5px;fill:#0E7490">ord·resp_p99 0.147</text>
+<rect x="492" y="269" width="84" height="36" rx="7" fill="#CCFBF1" stroke="#0891B2" stroke-width="0.7"/>
+<text x="534" y="284" text-anchor="middle" style="font-size:10.5px;font-weight:700;fill:#0E4F44">Rank ρ</text>
+<text x="534" y="297" text-anchor="middle" style="font-size:9px;fill:#0E7490">corr = 0.72</text>
+<line x1="479" y1="99" x2="492" y2="99" stroke="#0891B2" stroke-width="0.9" marker-end="url(#arrow)"/>
+<path d="M483 99 L483 163 L492 163" fill="none" stroke="#0891B2" stroke-width="0.9" marker-end="url(#arrow)"/>
+<line x1="479" y1="243" x2="492" y2="229" stroke="#0891B2" stroke-width="0.9" marker-end="url(#arrow)"/>
+<path d="M479 270 L484 270 L484 287 L492 287" fill="none" stroke="#EA580C" stroke-width="0.9" marker-end="url(#arrow)"/>
+<line x1="435" y1="278" x2="435" y2="291" stroke="#EA580C" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#arrow)"/>
+<text x="367" y="118" text-anchor="middle" style="font-size:12px;fill:#EA580C;font-style:italic">ℒ₃</text>
+<line x1="584" y1="245" x2="598" y2="245" stroke="#0891B2" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+<!-- P4 container -->
+<rect x="598" y="50" width="70" height="295" rx="10" fill="none" stroke="#16A34A" stroke-width="1.2" stroke-dasharray="5 3"/>
+<text x="633" y="65" text-anchor="middle" style="font-size:10px;font-weight:700;fill:#16A34A">P4: Decision</text>
+<rect x="606" y="73" width="54" height="40" rx="6" fill="#DCFCE7" stroke="#16A34A" stroke-width="0.7"/>
+<text x="633" y="88" text-anchor="middle" style="font-size:10px;font-weight:600;fill:#14532D">Trained</text>
+<text x="633" y="101" text-anchor="middle" style="font-size:10px;font-weight:600;fill:#14532D">model</text>
+<line x1="633" y1="113" x2="633" y2="127" stroke="#16A34A" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="606" y="128" width="54" height="38" rx="6" fill="#F1F5F9" stroke="#64748B" stroke-width="0.7"/>
+<text x="633" y="143" text-anchor="middle" style="font-size:10px;font-weight:600;fill:#334155">Score</text>
+<text x="633" y="157" text-anchor="middle" style="font-size:9.5px;fill:#64748B">A(t)</text>
+<line x1="633" y1="166" x2="633" y2="180" stroke="#16A34A" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="606" y="181" width="54" height="34" rx="6" fill="none" stroke="#16A34A" stroke-width="1.2"/>
+<text x="633" y="196" text-anchor="middle" style="font-size:10px;fill:#16A34A">A(t) &lt; 0</text>
+<text x="633" y="209" text-anchor="middle" style="font-size:9px;fill:#16A34A">threshold τ</text>
+<line x1="633" y1="215" x2="633" y2="231" stroke="#16A34A" stroke-width="1" marker-end="url(#arrow)"/>
+<text x="621" y="229" style="font-size:9px;fill:#16A34A">yes</text>
+<rect x="606" y="232" width="54" height="30" rx="6" fill="#DC2626" stroke="none"/>
+<text x="633" y="245" text-anchor="middle" style="font-size:10px;font-weight:700;fill:#fff">Abnormal</text>
+<text x="633" y="256" text-anchor="middle" style="font-size:8.5px;fill:#fca5a5">alert + SHAP</text>
+<path d="M659 198 L665 198 L665 296 L659 296" fill="none" stroke="#16A34A" stroke-width="0.9" marker-end="url(#arrow)"/>
+<text x="671" y="260" style="font-size:9px;fill:#6B7280">no</text>
+<rect x="606" y="282" width="54" height="30" rx="6" fill="#16A34A" stroke="none"/>
+<text x="633" y="295" text-anchor="middle" style="font-size:10px;font-weight:700;fill:#fff">Normal</text>
+<text x="633" y="306" text-anchor="middle" style="font-size:8.5px;fill:#bbf7d0">continue</text>
+
+<!-- BOTTOM ROW -->
+<rect x="14" y="358" width="664" height="84" rx="10" fill="none" stroke="#D1D5DB" stroke-width="0.8"/>
+<text x="340" y="374" text-anchor="middle" style="font-size:10px;font-weight:700;fill:#6B7280;letter-spacing:0.05em">KEY OUTPUTS</text>
+<rect x="24" y="381" width="190" height="50" rx="7" fill="#EDE9FE" stroke="#7C3AED" stroke-width="0.7"/>
+<text x="119" y="397" text-anchor="middle" style="font-size:10.5px;font-weight:700;fill:#4C1D95">Sparse feature set</text>
+<text x="119" y="411" text-anchor="middle" style="font-size:9px;fill:#6D28D9">k=16 of p=228 (93% cost cut)</text>
+<text x="119" y="423" text-anchor="middle" style="font-size:9px;fill:#6D28D9">stable across anomaly ratios</text>
+<rect x="230" y="381" width="218" height="50" rx="7" fill="#CCFBF1" stroke="#0891B2" stroke-width="0.7"/>
+<text x="339" y="397" text-anchor="middle" style="font-size:10.5px;font-weight:700;fill:#0E4F44">Detection performance</text>
+<text x="339" y="411" text-anchor="middle" style="font-size:9px;fill:#0E7490">F1=0.581  AUC=0.823  MCC=0.559</text>
+<text x="339" y="423" text-anchor="middle" style="font-size:9px;fill:#0E7490">3.4× better than full-feature IF</text>
+<rect x="464" y="381" width="202" height="50" rx="7" fill="#FFE4D6" stroke="#EA580C" stroke-width="0.7"/>
+<text x="565" y="397" text-anchor="middle" style="font-size:10.5px;font-weight:700;fill:#7C2D12">SHAP explanation</text>
+<text x="565" y="411" text-anchor="middle" style="font-size:9px;fill:#9A3412">Top: fe·db_connections 0.159</text>
+<text x="565" y="423" text-anchor="middle" style="font-size:9px;fill:#9A3412">Rank ρ=0.72 vs full model</text>
+
+<!-- caption -->
+<text x="340" y="458" text-anchor="middle" style="font-size:10px;fill:#9CA3AF">Fig. X.  Overall framework of SparseRank.</text>
+<!-- legend -->
+<rect x="40" y="468" width="10" height="10" rx="2" fill="#185FA5"/>
+<text x="54" y="477" style="font-size:9px;fill:#6B7280">Data ingestion</text>
+<rect x="136" y="468" width="10" height="10" rx="2" fill="#7C3AED"/>
+<text x="150" y="477" style="font-size:9px;fill:#6B7280">L1 feature selection</text>
+<rect x="268" y="468" width="10" height="10" rx="2" fill="#0891B2"/>
+<text x="282" y="477" style="font-size:9px;fill:#6B7280">Anomaly detection + SHAP</text>
+<rect x="430" y="468" width="10" height="10" rx="2" fill="#16A34A"/>
+<text x="444" y="477" style="font-size:9px;fill:#6B7280">Decision output</text>
+<rect x="524" y="468" width="10" height="10" rx="2" fill="none" stroke="#EA580C" stroke-width="1" stroke-dasharray="2 1"/>
+<text x="538" y="477" style="font-size:9px;fill:#6B7280">KPI oracle (eval only)</text>
+</svg>
+</body>
+</html>

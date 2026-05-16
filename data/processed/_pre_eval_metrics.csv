@@ -1,0 +1,2 @@
+k_features,p_total,F1,Precision,Recall,ROC_AUC,AveragePrecision,kpi_spearman_rho,cost_reduction_pct
+24,402,0.6469,0.6566,0.6374,0.7628,0.7311,0.3947,94.0

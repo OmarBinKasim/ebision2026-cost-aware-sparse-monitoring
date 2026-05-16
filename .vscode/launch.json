@@ -1,0 +1,37 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "▶  Run Full Experiment",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/run_full_experiment.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "▶  Run Basic Pipeline",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/run_pipeline.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "▶  Generate All Figures",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/generate_figures.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "▶  Data Loader (test)",
+      "type": "python",
+      "request": "launch",
+      "module": "src.data_loader",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    }
+  ]
+}

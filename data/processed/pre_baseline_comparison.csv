@@ -1,0 +1,6 @@
+Method,k_features,Cost_Reduction_%,F1,Precision,Recall,ROC_AUC,Note
+Full-feature IF,402,0.0,0.6537,0.6636,0.6441,0.778,all features
+SparseRank (L1),24,94.0,0.6621,0.669,0.6554,0.7655,L1 k=24
+Random-k IF,24,94.0,0.6464,0.6707,0.6239,0.749,random k=24
+Top-k ANOVA IF,24,94.0,0.5201,0.5318,0.509,0.5219,ANOVA k=24
+Top-20 freq IF,20,95.0,0.6286,0.6244,0.6329,0.7354,fixed 20 features
