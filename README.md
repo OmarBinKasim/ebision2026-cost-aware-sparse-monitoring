@@ -4,35 +4,10 @@
 
 EBISION 2026 — IFIP WG 8.4 International Symposium on E-Business Information Systems Evolution
 
----
-
-## Table of contents
-
-1. [What this project does](#1-what-this-project-does)
-2. [Prerequisites](#2-prerequisites)
-3. [Clone and open in VS Code](#3-clone-and-open-in-vs-code)
-4. [Create and activate a virtual environment](#4-create-and-activate-a-virtual-environment)
-5. [Install dependencies](#5-install-dependencies)
-6. [Configure VS Code Python interpreter](#6-configure-vs-code-python-interpreter)
-7. [Project structure](#7-project-structure)
-8. [Run the full pipeline](#8-run-the-full-pipeline)
-9. [Run individual stages](#9-run-individual-stages)
-10. [Generate all figures](#10-generate-all-figures)
-11. [Understanding the outputs](#11-understanding-the-outputs)
-12. [Troubleshooting](#12-troubleshooting)
-
----
 
 ## 1. What this project does
 
 SparseRank is a three-stage pipeline that answers two operational questions for e-commerce SREs:
-
-1. **Which metrics are sufficient to detect anomalies?** — answered by L1-regularised feature selection that reduces 228 metrics down to 16 (93 % monitoring cost reduction) while retaining detection quality.
-2. **Which of those metrics actually drove a specific anomaly score?** — answered by TreeSHAP attribution on the sparse feature set, validated against a business KPI oracle.
-
-The pipeline runs entirely on CPU, requires no GPU, no Docker, and no cloud account.
-
----
 
 ## 2. Prerequisites
 
@@ -176,15 +151,6 @@ This single command runs all four stages in order and is the recommended startin
 python run_pipeline.py
 ```
 
-### What each step does
-
-| Step | Module | Time | Output |
-|------|--------|------|--------|
-| 1 | `data_loader` | ~2 s | Synthetic RS-Anomic dataset (1,580 × 228). Cached to `data/processed/rs_anomic_wide.parquet` — subsequent runs load from cache instantly. |
-| 2 | `feature_select` | ~15 s | L1 sweep over C ∈ {0.001, 0.01, 0.1, 1.0}. Saves `selected_idx.npy` (k=16), `scaler.pkl`, `feature_select_results.csv`. |
-| 3 | `anomaly_detector` | ~5 s | IsolationForest on 16 features. Saves `anomaly_scores.npy`, `eval_metrics.csv`, `if_model.pkl`. |
-| 4 | `shap_explainer` | ~3 s | TreeSHAP on sparse set. Saves `shap_importance.csv`, `shap_rank_comparison.csv`. |
-| 5 | `evaluate` | ~10 s | 8 baselines, ROC/PR curves, confusion matrices, 4-panel figure PNG. |
 
 ### Expected terminal output
 
@@ -193,29 +159,8 @@ python run_pipeline.py
   SparseRank — Full Pipeline
 ============================================================
 
-[STEP 1] Load / generate dataset
-  Dataset: 1580 windows × 228 features
-
 [STEP 2] L1-regularized feature selection
-  C=0.001   k=  0  F1=0.0000
-  C=0.01    k= 16  F1=0.5806  ← optimal
-  C=0.1     k=228  F1=0.2069
-  C=1.0     k=152  F1=0.2759
-  ✓ Best C=0.01: k=16, cost reduction=93.0%
-
-[STEP 3] Isolation Forest on sparse features
-  F1=0.5806  AUC=0.8233
-
-[STEP 4] SHAP explainability
-  SHAP rank rho=0.7210
-
-[STEP 5] Evaluation + figures
-  ...
-
-Pipeline complete in ~40s
-```
-
----
+  ✓ Best C=0.01: k=24, cost reduction=94.0%
 
 ## 9. Run individual stages
 
@@ -238,70 +183,6 @@ python -c "import sys,os; sys.path.insert(0,'.'); os.chdir('.'); import src.shap
 python -c "import sys,os; sys.path.insert(0,'.'); os.chdir('.'); import src.evaluate as m; m.main()"
 ```
 
-Alternatively, open any file under `src/` in VS Code and use **Run → Run Python File in Terminal**.
-
-### Extended full analysis (PCA, t-SNE, cross-validation, all CSVs)
-
-Produces every intermediate file used in the paper (~3–4 minutes):
-
-```bash
-python -c "import sys,os; sys.path.insert(0,'.'); os.chdir('.'); exec(open('src/full_analysis.py').read())"
-```
-
-All outputs go to `data/processed/full/`.
-
----
-
-## 10. Generate all figures
-
-After the pipeline has completed at least once, run:
-
-```bash
-python generate_figures.py
-```
-
-Duration: ~90 seconds. Figures are saved to `experiments/figures/`.
-
-| File | Content |
-|------|---------|
-| `fig01_shap_importance.png` | SHAP feature importance — sparse set |
-| `fig02_performance_metrics_bar.png` | F1, Precision, Recall, AUC, MCC — all methods |
-| `fig03_roc_curves.png` | ROC curves — all 8 methods |
-| `fig04_pr_curves.png` | Precision-Recall curves |
-| `fig05_confusion_matrices.png` | 2×4 confusion matrix grid |
-| `fig06_violin_plots.png` | Score distributions — violin |
-| `fig07_box_plots.png` | Score distributions — box |
-| `fig08_pca_scatter.png` | PCA 2D: full vs sparse feature space |
-| `fig09_tsne_scatter.png` | t-SNE 2D projection |
-| `fig10_sweep_and_l1_path.png` | F1 vs k + L1 regularisation path |
-| `fig11_cost_vs_f1_scatter.png` | Monitoring cost vs F1 |
-| `fig12_cross_validation.png` | 5-fold cross-validation |
-| `fig13_pca_variance.png` | PCA scree + cumulative variance |
-| `fig14_correlation_heatmap.png` | Sparse feature correlation (16×16) |
-| `fig15_shap_beeswarm.png` | Per-window SHAP beeswarm |
-| `fig16_complete_summary.png` | **9-panel master figure — use in paper** |
-
----
-
-## 11. Understanding the outputs
-
-### Key files after a successful run
-
-```
-data/processed/
-├── rs_anomic_wide.parquet      ← cached dataset (delete to regenerate)
-├── selected_idx.npy            ← indices of the 16 selected features
-├── scaler.pkl                  ← fitted StandardScaler
-├── if_model.pkl                ← trained IsolationForest
-├── anomaly_scores.npy          ← IF decision function scores (test set)
-├── anomaly_preds.npy           ← binary predictions (test set)
-├── y_test.npy                  ← ground-truth labels (test set)
-├── kpi_test.npy                ← KPI oracle values (test set)
-├── feature_select_results.csv  ← L1 sweep table
-├── eval_metrics.csv            ← final model metrics
-├── shap_importance.csv         ← mean |SHAP| per feature (sorted)
-├── shap_rank_comparison.csv    ← sparse vs full SHAP rank correlation
-└── baseline_comparison.csv     ← all 8 methods full comparison table
 ```
 
 ### Key CSV columns
@@ -391,22 +272,6 @@ Then delete the cache and re-run. `data_loader.py` detects the CSV files automat
 ```bash
 rm data/processed/rs_anomic_wide.parquet
 python run_pipeline.py
-```
 
----
-
-## Citation
-
-```bibtex
-@inproceedings{sparserank2026,
-  title     = {SparseRank: Explainable Cost-Aware Feature Selection
-               for Anomaly Detection in E-Commerce Microservices},
-  booktitle = {EBISION 2026 -- IFIP WG 8.4 International Symposium
-               on E-Business Information Systems Evolution},
-  year      = {2026}
-}
-```
-
----
 
 *SparseRank · EBISION 2026 · Python 3.10+ · CPU only · ~40 s end-to-end*
